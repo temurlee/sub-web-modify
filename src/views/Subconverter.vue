@@ -348,7 +348,7 @@ export default {
           "dlj.tf": "https://dlj.tf/short",
         },
         customBackend: {
-          "自用后端": "https://sub.temurlee.dpdns.org",
+          "自用-默认后端": "https://sub.temurlee.dpdns.org",
           "CM提供-负载均衡后端": "https://subapi.cmliussss.net",
           "CM提供-应急备用后端": "https://subapi.fxxk.dedyn.io",
           "肥羊提供-增强型后端": "https://url.v1.mk",
@@ -366,7 +366,7 @@ export default {
             label: "默认规则",
             options: [
               {
-                label: "自用 兼容AI服务",
+                label: "Full 自用版 兼容AI服务",
                 value: "https://raw.githubusercontent.com/temurlee/rules/main/full.ini"
               }
             ]
@@ -801,9 +801,9 @@ export default {
       form: {
         sourceSubUrl: "",
         clientType: "",
-        customBackend: this.getUrlParam() == "" ? "https://url.v1.mk" : this.getUrlParam(),
+        customBackend: this.getUrlParam() == "" ? "https://sub.temurlee.dpdns.org" : this.getUrlParam(),
         shortType: "https://v1.mk/short",
-        remoteConfig: "https://raw.githubusercontent.com/cmliu/ACL4SSR/main/Clash/config/ACL4SSR_Online.ini",
+        remoteConfig: "https://raw.githubusercontent.com/temurlee/rules/main/full.ini",
         excludeRemarks: "",
         includeRemarks: "",
         filename: "",
