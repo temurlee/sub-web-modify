@@ -368,6 +368,8 @@ export default {
               {
                 label: "自用 兼容AI服务",
                 value: "https://raw.githubusercontent.com/temurlee/rules/main/full.ini"
+              }
+            ]
               },
           {
             label: "CM规则",
