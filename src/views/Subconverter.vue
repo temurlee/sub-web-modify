@@ -63,6 +63,9 @@
                         </el-button>
                       </el-form-item>
                     </template>
+                    <el-form-item label="自定义UA:">
+                      <el-input v-model="form.diyua" placeholder="设置后端获取订阅链接时所用的自定义User-Agent"/>
+                    </el-form-item>
                     <el-form-item label="包含节点:">
                       <el-input v-model="form.includeRemarks" placeholder="要保留的节点，支持正则" />
                     </el-form-item>
@@ -116,7 +119,7 @@
                               <el-checkbox v-model="form.tpl.clash.doh" label="Clash.DoH"></el-checkbox>
                             </el-col>
                             <el-col :span="12">
-                              <el-checkbox v-model="form.appendType" label="插入节点类型"></el-checkbox>
+                              <el-checkbox v-model="form.diydns" label="开启私有化DNS"></el-checkbox>
                             </el-col>
                           </el-row>
                           <el-row :gutter="10">
@@ -145,9 +148,10 @@
                           </el-row>
                           <el-row :gutter="10">
                             <el-col :span="12">
-                              <div style="margin-left: 35%">
-                                <el-checkbox v-model="form.tpl.singbox.ipv6" label="Sing-Box支持IPV6"></el-checkbox>
-                              </div>
+                              <el-checkbox v-model="form.appendType" label="插入节点类型"></el-checkbox>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-checkbox v-model="form.tpl.singbox.ipv6" label="SingBox-IPV6"></el-checkbox>
                             </el-col>
                           </el-row>
                           <el-button slot="reference">更多选项</el-button>
@@ -323,8 +327,10 @@ export default {
       options: {
         clientTypes: {
           Clash: "clash",
-          "Surge4/5": "surge&ver=4",
           "Sing-Box": "singbox",
+          "Sing-Box-1.15": "singbox&singbox_version=1.15",
+          ShadowRocket: "shadowrocket",
+          "Surge5/6": "surge&ver=5",
           V2Ray: "v2ray",
           Trojan: "trojan",
           ShadowsocksR: "ssr",
@@ -334,8 +340,8 @@ export default {
           "Quantumult X": "quanx",
           Loon: "loon",
           Mellow: "mellow",
+          Surge4: "surge&ver=4",
           Surge3: "surge&ver=3",
-          Surge2: "surge&ver=2",
           ClashR: "clashr",
           "Shadowsocks(SIP002)": "ss",
           "Shadowsocks Android(SIP008)": "sssub",
@@ -351,15 +357,15 @@ export default {
           "自用-默认后端": "https://sub.temurlee.dpdns.org",
           "CM提供-负载均衡后端": "https://subapi.cmliussss.net",
           "CM提供-应急备用后端": "https://subapi.fxxk.dedyn.io",
-          "肥羊提供-增强型后端": "https://url.v1.mk",
-          "肥羊提供-备用后端": "https://api.v1.mk",
+          "肥羊提供-增强型后端": "https://api.v1.mk",
+          "肥羊提供-备用后端": "https://url.v1.mk",
         },
         backendOptions: [
-          { value: "https://subapi.cmliussss.net" },
+          { value: "https://sub.temurlee.dpdns.org" },
           { value: "https://subapi.cmliussss.net" },
           { value: "https://subapi.fxxk.dedyn.io" },
-          { value: "https://url.v1.mk" },
           { value: "https://api.v1.mk" },
+          { value: "https://url.v1.mk" },
         ],
         remoteConfig: [
             {
@@ -810,16 +816,18 @@ export default {
         rename: "",
         devid: "",
         interval: "",
+        diyua: "clash.meta/1.19.0",
         emoji: true,
         nodeList: false,
         extraset: false,
         tls13: false,
-        udp: false,
+        udp: true,
         xudp: false,
         tfo: false,
         sort: false,
         expand: true,
-        scv: false,
+        diydns: true,
+        scv: true,
         fdn: false,
         appendType: false,
         insert: false, // 是否插入默认订阅的节点，对应配置项 insert_url
@@ -922,7 +930,7 @@ export default {
       }
     },
     tanchuang() {
-      this.$alert(`<div style="text-align:center;font-size:15px"><strong><span style="font-size:20px;color:red">apiurl.v1.mk已被蔷，请更换最新的url.v1.mk</span></strong></br><strong><span style="font-size:20px">本站官方TG交流群：</span><span><a href="https://t.me/feiyangdigital" target="_blank" style="color:red;font-size:20px;text-decoration:none">点击加入</a></span></strong></br><strong><span style="font-size:20px">IEPL高端机场（<span style="color:blue">原生支持奈飞非自制剧、Disney Plus、HBO等各种流媒体，支持Chat-GPT和ISP住宅IP助力Tiktok等跨境贸易使用</span>）：</span><span><a href="https://www.mcwy.org" style="color:red;font-size:20px;text-decoration:none">点击注册</a></span></strong></br><strong><span style="font-size:20px">奈飞、ChatGPT合租（<span style="color:blue">优惠码：feiyang</span>）：</span><span><a href="https://hezu.v1.mk/" style="color:red;font-size:20px;text-decoration:none">点击上车</a></span></strong></br><strong><span style="font-size:20px">115蓝光4K原盘内部资源群：</span><span><a href="https://115.metshop.top" target="_blank" style="color:red;font-size:20px;text-decoration:none">点击查看</a></span></strong></br>本站服务器赞助机场-牧场物语，是一家拥有BGP中继+IEPL企业级内网专线的高端机场，适合各个价位要求的用户，牧场物语采用最新的奈飞非自制剧解决方案，出口随机更换IP，确保尽可能的每个用户可以用上独立IP，以此来稳定解决奈飞非自制剧的封锁，并推出7*24小时奈飞非自制剧节点自动检测系统，用户再也不用自己手动一个个的乱试节点了，目前牧场的新加坡，台湾等节区域点均可做到24H稳定非自制剧观看，支持Chat-GPT和ISP住宅IP助力Tiktok等跨境贸易使用！</br></div>`, '信息面板', {
+      this.$alert(`<div style="color:black;text-align:center;font-size:15px"><strong><span style="font-size:15px">本站官方TG交流群：</span><span><a href="https://t.me/feiyangdigital" target="_blank" style="color:red;font-size:15px;text-decoration:none">点击加入</a></span></strong></br><strong><span style="font-size:15px">老牌高端机场Rancho（<span style="color:blue">拥有数十不同国家节点，全部原生解锁支持奈飞、迪士尼、HBO等各种流媒体，全部套餐节点支持Chat GPT等各种AI，支持ISP住宅IP助力Tiktok等跨境贸易使用，采用最新Vless Encryption量子加密协议和AnyTLS双协议，在众多机场不稳定的今天，依旧生龙活虎，Vless Encryption量子加密协议和AnyTLS双协议+企业级跨境专线，是当下恶劣环境的最优解，全部套餐购买后直接赠送Emby影音服务，最高可体验4K杜比视界画展，媲美奈飞4K杜比视界，免费给购买了任意套餐的用户开放，稳定运营五年未跑路，在今年大多数机场纷纷倒闭的情况下，依旧坚挺扩张，还推出了包括Android TV在内的一键客户端，方便电视用户遥控操作，非常便利，强烈推荐，非常值得购买！</span>：<span><a href="https://www.mcwy.org" target="_blank" style="color:red;font-size:15px;text-decoration:none">点击注册</a></span></strong></br><strong><span style="font-size:15px">115蓝光4K原盘内部资源群</span></strong>）：</span><strong><span><a href="https://readme.115vip.shop/" target="_blank" style="color:red;font-size:15px;text-decoration:none">点击查看</a></span></strong></br><strong><span style="font-size:15px">奈飞、ChatGPT合租（<span style="color:blue">优惠码：feiyang</span>）：</span><span><a href="https://hezu.v1.mk/" style="color:red;font-size:15px;text-decoration:none">点击上车</a></span></strong></br></div>`, '信息面板', {
         confirmButtonText: '确定',
         dangerouslyUseHTMLString: true,
         customClass: 'msgbox'
@@ -1016,6 +1024,10 @@ export default {
         this.customSubUrl +=
           "&append_type=" + this.form.appendType.toString();
       }
+      if (this.form.diydns) {
+        this.customSubUrl +=
+            "&diydns=" + this.form.diydns.toString();
+      }
       if (this.form.tls13) {
         this.customSubUrl +=
           "&tls13=" + this.form.tls13.toString();
@@ -1025,22 +1037,22 @@ export default {
           "&sort=" + this.form.sort.toString();
       }
       this.customSubUrl +=
-        "&emoji=" +
-        this.form.emoji.toString() +
-        "&list=" +
-        this.form.nodeList.toString() +
-        "&xudp=" +
-        this.form.xudp.toString() +
-        "&udp=" +
-        this.form.udp.toString() +
-        "&tfo=" +
-        this.form.tfo.toString() +
-        "&expand=" +
-        this.form.expand.toString() +
-        "&scv=" +
-        this.form.scv.toString() +
-        "&fdn=" +
-        this.form.fdn.toString();
+          "&emoji=" +
+          this.form.emoji.toString() +
+          "&list=" +
+          this.form.nodeList.toString() +
+          "&xudp=" +
+          this.form.xudp.toString() +
+          "&udp=" +
+          this.form.udp.toString() +
+          "&tfo=" +
+          this.form.tfo.toString() +
+          "&expand=" +
+          this.form.expand.toString() +
+          "&scv=" +
+          this.form.scv.toString() +
+          "&fdn=" +
+          this.form.fdn.toString();    
       if (this.form.clientType.includes("surge")) {
         if (this.form.tpl.surge.doh === true) {
           this.customSubUrl += "&surge.doh=true";
@@ -1057,6 +1069,10 @@ export default {
           this.customSubUrl += "&singbox.ipv6=1";
         }
       }
+      if (this.form.diyua.trim() !== "") {
+        this.customSubUrl +=
+            "&diyua=" + encodeURIComponent(this.form.diyua);
+      }
       this.$copyText(this.customSubUrl);
       this.$message.success("定制订阅已复制到剪贴板");
     },
@@ -1067,7 +1083,7 @@ export default {
           : this.form.shortType;
       this.loading1 = true;
       let data = new FormData();
-      data.append("longUrl", btoa(this.customSubUrl));
+      data.append("longUrl", this.$btoa(this.customSubUrl));
       if (this.customShortSubUrl.trim() != "") {
         data.append("shortKey", this.customShortSubUrl.trim().indexOf("http") < 0 ? this.customShortSubUrl.trim() : "");
       }
@@ -1164,7 +1180,7 @@ export default {
             this.form.clientType = target + "&ver=" + param.get("ver");
           } else if (target === 'surge') {
             //类型为surge,没有ver
-            this.form.clientType = target + "&ver=4"
+            this.form.clientType = target + "&ver=5"
           } else {
             //类型为其他
             this.form.clientType = target;
@@ -1199,6 +1215,9 @@ export default {
         }
         if (param.get("append_type")) {
           this.form.appendType = param.get("append_type") === 'true';
+        }
+        if (param.get("diydns")) {
+          this.form.diydns = param.get("diydns") === 'true';
         }
         if (param.get("tls13")) {
           this.form.tls13 = param.get("tls13");
@@ -1242,6 +1261,9 @@ export default {
         if (param.get("singbox.ipv6")) {
           this.form.tpl.singbox.ipv6 = param.get("singbox.ipv6") === '1';
         }
+        if (param.get("diyua")) {
+          this.form.diyua = param.get("diyua");
+        }
         this.dialogLoadConfigVisible = false;
         this.$message.success("长/短链接已成功解析为订阅信息");
       })();
@@ -1266,6 +1288,7 @@ export default {
       data.append("sdoh", encodeURIComponent(this.form.tpl.surge.doh.toString()));
       data.append("cdoh", encodeURIComponent(this.form.tpl.clash.doh.toString()));
       data.append("newname", encodeURIComponent(this.form.new_name.toString()));
+      data.append("diyua", encodeURIComponent(this.form.diyua.toString()));
       return data;
     },
     confirmUploadScript() {
